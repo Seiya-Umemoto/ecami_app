@@ -14,7 +14,7 @@
     "react-dropzone": "^11.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
-    "react-webcam": "^5.2.2"
+    "react-input-slider": "6.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

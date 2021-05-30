@@ -1,32 +1,33 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import Image from './Image';
+import Sequence from './Sequence';
 import { Button, Spinner } from 'react-bootstrap';
 
-class ImageList extends Component {
+class SequenceList extends Component {
     state = { 
-        images: [],
-        visible: 2,
+        sequences: [],
+        visible: 4,
         isLoading: true,
         newLoaded: false,
         status: false,
     }
     
     componentDidMount() {
-        setTimeout(this.getImages, 1500)
+        setTimeout(this.getSequences, 1500)
     }
 
-    getImages = () =>{
-       axios.get('http://127.0.0.1:8000/api/images/', {
+    getSequences = () =>{
+       axios.get('http://127.0.0.1:8000/api/sequences/', {
            headers: {
                'accept': 'application/json'
            }
        }).then(resp=>{
            this.setState({
-               images: resp.data,
+               sequences: resp.data,
                status: true,
             })
            console.log(resp)
+           console.log(resp.data)
        })
        this.setState({isLoading:false})
    }
@@ -44,8 +45,8 @@ class ImageList extends Component {
    }
 
     render() { 
-        const images = this.state.images.slice(0, this.state.visible).map(img=>{
-            return <Image key={img.id} pic={img.picture} name={img.classified}/>
+        const sequences = this.state.sequences.slice(0, this.state.visible).map(sequence=>{
+            return <Sequence key={sequence.id} sequence={sequence.sequence} name={sequence.classified}/>
         })
         return ( 
             <div>
@@ -53,19 +54,19 @@ class ImageList extends Component {
                 <Spinner animation="border" role="status"></Spinner>
                 : 
                     <React.Fragment>
-                        {((this.state.images.length === 0) && (this.state.status)) &&
-                        <h3>No images classified</h3>
+                        {((this.state.sequences.length === 0) && (this.state.status)) &&
+                        <h3>No sequences classified</h3>
                         }
-                        {images}
+                        {sequences}
                         {this.state.newLoaded &&
                         <Spinner animation="border" role="status"></Spinner>
                         }
                         <br />
-                        {((this.state.images.length > this.state.visible) && (this.state.images.length > 2)) &&
+                        {((this.state.sequences.length > this.state.visible) && (this.state.sequences.length > 2)) &&
                         <Button className="mb-3" variant='primary' size='lg' onClick={this.handleVisible}>Load more</Button>
                         }
-                        {((this.state.images.length <= this.state.visible) && (this.state.images.length > 0)) &&
-                        <h3 className="mb-3">no more images to load</h3>
+                        {((this.state.sequences.length <= this.state.visible) && (this.state.sequences.length > 0)) &&
+                        <h3 className="mb-3">no more sequences to load</h3>
                         }
                     </React.Fragment>
                 }
@@ -74,4 +75,4 @@ class ImageList extends Component {
     }
 }
  
-export default ImageList;
+export default SequenceList;

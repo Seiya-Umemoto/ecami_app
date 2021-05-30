@@ -44,15 +44,21 @@ class Classifier extends Component {
 
      sendSequence =()=>{
          this.activateSpinner()
-         const sequenceData = {
-             name: this.state.sequences[0].name
-         }
+        //  const sequenceData = {
+        //      name: this.state.sequences[0].name
+        //  }
+         let sequenceData = JSON.stringify({
+            sequence: this.state.sequences
+          });
         //  let formData = new FormData()
         //  console.log(this.state.sequences[0].name)
         //  formData.append('picture', this.state.sequences[0], this.state.sequences[0].name)
         //  console.log(formData.getAll('picture'))
-         axios.post('http://127.0.0.1:8000/api/images/', sequenceData, {
+        console.log(this.state.sequences);
+        console.log(sequenceData);
+         axios.post('http://127.0.0.1:8000/api/sequences/', sequenceData, {
              headers: {
+                'accept': 'application/json',
                 'Content-Type': 'application/json',
              }
          })
@@ -66,7 +72,7 @@ class Classifier extends Component {
      }
 
      getSequenceClass =(obj)=> {
-        axios.get(`http://127.0.0.1:8000/api/images/${obj.data.id}/`, {
+        axios.get(`http://127.0.0.1:8000/api/sequences/${obj.data.id}/`, {
             headers: {
                 'accept': 'application/json',
             }
@@ -118,17 +124,17 @@ class Classifier extends Component {
     }
 
     handleSubmit = (event) => {
-        alert('Enzyme Sequence was inputted: ' + this.state.sequences[0]);
+        alert('Enzyme Sequence was inputted: ' + this.state.sequences);
         event.preventDefault();
         this.sendSequence();
     }
 
     render() { 
-        // const sequences = this.state.sequences.map(sequence => (
-        //     <li key={sequence.name}>
-        //       {sequence.name} - {sequence.size} bytes
-        //     </li>
-        //   ));
+        const sequences = this.state.sequences.map(sequence => (
+            <li key={sequence.name}>
+              {sequence.name} - {sequence.size} bytes
+            </li>
+          ));
         return ( 
             <div>
                 <form onSubmit={this.handleSubmit}>

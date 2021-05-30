@@ -3,12 +3,14 @@ import './Classifier.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Alert, Button, Image, Spinner} from 'react-bootstrap';
 import axios from 'axios';
+import Slider from 'react-input-slider';
 
 class Classifier extends Component {
     state = { 
         sequences: [],
         isLoading: false,
         recentSequence: null,
+        gamma: null,
      }
 
     //  onDrop =(sequences)=>{
@@ -130,11 +132,11 @@ class Classifier extends Component {
     }
 
     render() { 
-        const sequences = this.state.sequences.map(sequence => (
-            <li key={sequence.name}>
-              {sequence.name} - {sequence.size} bytes
-            </li>
-          ));
+        // const sequences = this.state.sequences.map(sequence => (
+        //     <li key={sequence.name}>
+        //       {sequence.name} - {sequence.size} bytes
+        //     </li>
+        //   ));
         return ( 
             <div>
                 <form onSubmit={this.handleSubmit}>
@@ -144,7 +146,13 @@ class Classifier extends Component {
                     </label>
                     <br></br>
                     {/* <input type="submit" value="Predict" /> */}
-                
+
+                    {this.state.sequences.length > 0 &&
+                        <div>
+                        <Slider axis="x" x={this.state.gamma} onChange={this.setState} />
+                        {/* <Slider axis="gamma" x={this.state.gamma} onChange={({ x }) => this.setState({gamma : x}) /> */}
+                        </div>
+                    }
             
                     {this.state.sequences.length > 0 &&
                     <Button variant='info' size='lg' className='mt-3' onClick={this.sendSequence}>Predict Sequence</Button>

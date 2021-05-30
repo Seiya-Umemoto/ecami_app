@@ -13,15 +13,6 @@ class Classifier extends Component {
         gamma: null,
      }
 
-    //  onDrop =(sequences)=>{
-    //     this.setState({
-    //         sequences:[],
-    //         isLoading: true, 
-    //         recentSequence: null,
-    //         })
-    //     this.loadSequence(sequences)
-    //  }
-
      loadSequence=(sequences)=>{
         setTimeout(() => {
             this.setState({
@@ -46,16 +37,9 @@ class Classifier extends Component {
 
      sendSequence =()=>{
          this.activateSpinner()
-        //  const sequenceData = {
-        //      name: this.state.sequences[0].name
-        //  }
          let sequenceData = JSON.stringify({
             sequence: this.state.sequences
           });
-        //  let formData = new FormData()
-        //  console.log(this.state.sequences[0].name)
-        //  formData.append('picture', this.state.sequences[0], this.state.sequences[0].name)
-        //  console.log(formData.getAll('picture'))
         console.log(this.state.sequences);
         console.log(sequenceData);
          axios.post('http://127.0.0.1:8000/api/sequences/', sequenceData, {
@@ -89,63 +73,19 @@ class Classifier extends Component {
         this.deactivateSpinner()
      }
 
-    setRef = (webcam) => {
-        this.webcam = webcam;
-    }
-
-    dataURLtoBlob = (dataurl) => {
-        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-        while(n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-        return new Blob([u8arr], {type:mime});
-    }
-
-    screenShot = () => {
-        const imageSrc = this.webcam.getScreenshot();
-        const blob = this.dataURLtoBlob(imageSrc);
-        var today = new Date(),
-            time = today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds() + ".jpg";
-        const myFile = this.blobToFile(blob, time);
-        this.setState({sequences:[]})
-        this.state.sequences.push(myFile);
-        this.sendSequence();
-    }
-
-    // blobToFile = (theBlob, fileName) => {
-    //     theBlob.lastModifiedDate = new Date();
-    //     theBlob.name = fileName;
-    //     theBlob.path = fileName;
-    //     theBlob.webkitRelativePath = "";
-    //     return theBlob;
-    // }
-
     handleChange = (event) => {
         this.setState({sequences : event.target.value});
     }
 
-    handleSubmit = (event) => {
-        alert('Enzyme Sequence was inputted: ' + this.state.sequences);
-        event.preventDefault();
-        this.sendSequence();
-    }
-
     render() { 
-        // const sequences = this.state.sequences.map(sequence => (
-        //     <li key={sequence.name}>
-        //       {sequence.name} - {sequence.size} bytes
-        //     </li>
-        //   ));
         return ( 
             <div>
-                <form onSubmit={this.handleSubmit}>
+                <form>
                     <label>
-                        <div class="input">Input Enzyme Sequence:</div>I
+                        <div class="input">Input Enzyme Sequence:</div>
                     <textarea value={this.state.value} onChange={this.handleChange} rows={10} cols={100} />
                     </label>
                     <br></br>
-                    {/* <input type="submit" value="Predict" /> */}
 
                     {this.state.sequences.length > 0 &&
                         <div>

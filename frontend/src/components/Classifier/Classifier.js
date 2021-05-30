@@ -1,41 +1,39 @@
 import React, { Component } from 'react';
-import Dropzone from 'react-dropzone';
 import './Classifier.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Alert, Button, Image, Spinner} from 'react-bootstrap';
 import axios from 'axios';
-import Webcam from 'react-webcam';
 
 class Classifier extends Component {
     state = { 
-        files: [],
+        sequences: [],
         isLoading: false,
-        recentImage: null,
+        recentSequence: null,
      }
 
-     onDrop =(files)=>{
-        this.setState({
-            files:[],
-            isLoading: true, 
-            recentImage: null,
-            })
-        this.loadImage(files)
-     }
+    //  onDrop =(sequences)=>{
+    //     this.setState({
+    //         sequences:[],
+    //         isLoading: true, 
+    //         recentSequence: null,
+    //         })
+    //     this.loadSequence(sequences)
+    //  }
 
-     loadImage=(files)=>{
+     loadSequence=(sequences)=>{
         setTimeout(() => {
             this.setState({
-                files,
+                sequences,
                 isLoading: false
             }, () => {
-                console.log(this.state.files[0].name)
+                console.log(this.state.sequences[0].name)
             })
         }, 1000);
      }
 
      activateSpinner =()=> {
         this.setState({
-            files:[],
+            sequences:[],
             isLoading:true,
         })
      }
@@ -44,20 +42,22 @@ class Classifier extends Component {
         this.setState({isLoading:false})
      }
 
-     sendImage =()=>{
+     sendSequence =()=>{
          this.activateSpinner()
-         let formData = new FormData()
-         console.log(this.state.files[0].name)
-         formData.append('picture', this.state.files[0], this.state.files[0].name)
-         console.log(formData.getAll('picture'))
-         axios.post('http://127.0.0.1:8000/api/images/', formData, {
+         const sequenceData = {
+             name: this.state.sequences[0].name
+         }
+        //  let formData = new FormData()
+        //  console.log(this.state.sequences[0].name)
+        //  formData.append('picture', this.state.sequences[0], this.state.sequences[0].name)
+        //  console.log(formData.getAll('picture'))
+         axios.post('http://127.0.0.1:8000/api/images/', sequenceData, {
              headers: {
-                'accept': 'application/json',
-                'content-type': 'multipart/form-data'
+                'Content-Type': 'application/json',
              }
          })
          .then(resp=>{
-             this.getImageClass(resp)
+             this.getSequenceClass(resp)
              console.log(resp.data.id)
          })
          .catch(err=>{
@@ -65,14 +65,14 @@ class Classifier extends Component {
          })
      }
 
-     getImageClass =(obj)=> {
+     getSequenceClass =(obj)=> {
         axios.get(`http://127.0.0.1:8000/api/images/${obj.data.id}/`, {
             headers: {
                 'accept': 'application/json',
             }
         })
         .then(resp=>{
-            this.setState({recentImage:resp})
+            this.setState({recentSequence:resp})
             console.log(resp)
         })
         .catch(err=>{
@@ -100,65 +100,63 @@ class Classifier extends Component {
         var today = new Date(),
             time = today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds() + ".jpg";
         const myFile = this.blobToFile(blob, time);
-        this.setState({files:[]})
-        this.state.files.push(myFile);
-        this.sendImage();
+        this.setState({sequences:[]})
+        this.state.sequences.push(myFile);
+        this.sendSequence();
     }
 
-    blobToFile = (theBlob, fileName) => {
-        theBlob.lastModifiedDate = new Date();
-        theBlob.name = fileName;
-        theBlob.path = fileName;
-        theBlob.webkitRelativePath = "";
-        return theBlob;
+    // blobToFile = (theBlob, fileName) => {
+    //     theBlob.lastModifiedDate = new Date();
+    //     theBlob.name = fileName;
+    //     theBlob.path = fileName;
+    //     theBlob.webkitRelativePath = "";
+    //     return theBlob;
+    // }
+
+    handleChange = (event) => {
+        this.setState({sequences : event.target.value});
+    }
+
+    handleSubmit = (event) => {
+        alert('Enzyme Sequence was inputted: ' + this.state.sequences[0]);
+        event.preventDefault();
+        this.sendSequence();
     }
 
     render() { 
-        const files = this.state.files.map(file => (
-            <li key={file.name}>
-              {file.name} - {file.size} bytes
-            </li>
-          ));
+        // const sequences = this.state.sequences.map(sequence => (
+        //     <li key={sequence.name}>
+        //       {sequence.name} - {sequence.size} bytes
+        //     </li>
+        //   ));
         return ( 
             <div>
-            <Dropzone onDrop={this.onDrop} accept='image/png, image/jpeg'> 
-            {({isDragActive, getRootProps, getInputProps}) => (
-                <section className="container">
-                    <div {...getRootProps({className: 'dropzone back'})}>
-                        <input {...getInputProps()} />
-                        <i className="far fa-image mb-2 text-muted" style={{fontSize:100}}></i>
-                        <p className='text-muted'>{isDragActive ? "Drop some images" : "Drag 'n' drop some files here, or click to select files"}</p>
-                    </div>
-                    <aside>
-                        {files}
-                    </aside>
-
-                    {this.state.files.length > 0 &&
-                    <Button variant='info' size='lg' className='mt-3' onClick={this.sendImage}>Select Image</Button>
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        <div class="input">Input Enzyme Sequence:</div>I
+                    <textarea value={this.state.value} onChange={this.handleChange} rows={10} cols={100} />
+                    </label>
+                    <br></br>
+                    {/* <input type="submit" value="Predict" /> */}
+                
+            
+                    {this.state.sequences.length > 0 &&
+                    <Button variant='info' size='lg' className='mt-3' onClick={this.sendSequence}>Predict Sequence</Button>
                     }
+                </form>
 
                     {this.state.isLoading && 
                     <Spinner animation="border" role="status"></Spinner>
                     }
 
-                    {this.state.recentImage &&
+                    {this.state.recentSequence &&
                     <React.Fragment>
                         <Alert variant='primary'>
-                            {this.state.recentImage.data.classified}
+                            {this.state.recentSequence.data.classified}
                         </Alert>
-                        <Image className='justify-content-center' src={this.state.recentImage.data.picture} height='200' rounded/>
+                        <Image className='justify-content-center' src={this.state.recentSequence.data.picture} height='200' rounded/>
                     </React.Fragment>
                     }
-                </section>
-            )}
-            </Dropzone>
-            <Button variant='info' size='lg' className='mt-3' onClick={this.screenShot}>Take a picture</Button>
-            <br></br>
-            <Webcam
-                audio = {false}
-                ref = {this.setRef}
-                screenshotFormat="image/jpeg"
-            />
             </div>
          );
     }

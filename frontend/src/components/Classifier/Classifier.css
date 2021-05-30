@@ -12,3 +12,7 @@
 .back:hover{
     border: 3px dashed deepskyblue;
 }
+
+div.input{
+    font-size: 200%;
+}

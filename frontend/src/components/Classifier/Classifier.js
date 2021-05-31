@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import './Classifier.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Alert, Button, Image, Spinner} from 'react-bootstrap';
 import axios from 'axios';
-// import Slider from 'react-input-slider';
-import RangeStepInput from 'react-range-step-input';
+import Slider from 'react-input-slider';
+// import {RangeStepInput} from 'react-range-step-input';
+import RangeSlider from 'react-bootstrap-range-slider';
 
 class Classifier extends Component {
     state = { 
@@ -12,9 +13,10 @@ class Classifier extends Component {
         isLoading: false,
         recentSequence: null,
         gamma: 1.0,
-     }
+    }
 
-     loadSequence=(sequences)=>{
+
+    loadSequence=(sequences)=>{
         setTimeout(() => {
             this.setState({
                 sequences,
@@ -23,20 +25,20 @@ class Classifier extends Component {
                 console.log(this.state.sequences[0].name)
             })
         }, 1000);
-     }
+    }
 
-     activateSpinner =()=> {
+    activateSpinner =()=> {
         this.setState({
             sequences:[],
             isLoading:true,
         })
-     }
+    }
 
-     deactivateSpinner =()=> {
+    deactivateSpinner =()=> {
         this.setState({isLoading:false})
-     }
+    }
 
-     sendSequence =()=>{
+    sendSequence =()=>{
         this.activateSpinner()
         let sequenceData = JSON.stringify({
             sequence: this.state.sequences
@@ -47,18 +49,18 @@ class Classifier extends Component {
              headers: {
                 'accept': 'application/json',
                 'Content-Type': 'application/json',
-             }
-         })
-         .then(resp=>{
+            }
+        })
+        .then(resp=>{
              this.getSequenceClass(resp)
              console.log(resp.data.id)
-         })
-         .catch(err=>{
+        })
+        .catch(err=>{
              console.log(err)
-         })
-     }
+        })
+    }
 
-     getSequenceClass =(obj)=> {
+    getSequenceClass =(obj)=> {
         axios.get(`http://127.0.0.1:8000/api/sequences/${obj.data.id}/`, {
             headers: {
                 'accept': 'application/json',
@@ -72,7 +74,7 @@ class Classifier extends Component {
             console.log(err)
         })
         this.deactivateSpinner()
-     }
+    }
 
     handleChange = (event) => {
         this.setState({sequences : event.target.value});
@@ -83,8 +85,37 @@ class Classifier extends Component {
         this.setState({gamma: newVal})
     }
 
+    SliderComponent1 = () => {
+        const [state, setState] = useState({gamma : 1.0});
+
+        return (
+            <React.Fragment>
+                <div>{'gamma: ' + this.state.gamma}</div>
+                <Slider
+                    axis="x"
+                    xstep={0.1}
+                    xmin={0}
+                    xmax={5}
+                    x={this.state.gamma}
+                    // onChange={({ x }) => this.setState({ x: parseFloat(x.toFixed(2)) })}
+                    onChange={changeEvent => this.setState(changeEvent.target.value)}
+                />
+            </React.Fragment>
+        )
+    }
+
+    SliderComponent2 = () => {
+        const [ value, setValue ] = useState(0); 
+
+        return (
+            <RangeSlider
+                value={value}
+                onChange={changeEvent => setValue(changeEvent.target.value)}
+            />
+  );
+    }
+
     render() { 
-        // const [state, setState] = useState({gamma : 1.0})
 
         return ( 
             <div>
@@ -99,11 +130,7 @@ class Classifier extends Component {
                     {this.state.sequences.length > 0 &&
                         <div>
                             <p>Input gamma value:</p>
-                            <RangeStepInput>
-                                min={0} max={100}
-                                value={this.state.gamma} step={1}
-                                onChange={this.onChange.bind(this)}
-                            </RangeStepInput>
+                            <this.SliderComponent2></this.SliderComponent2>
                         </div>
                     }
                     <br></br>

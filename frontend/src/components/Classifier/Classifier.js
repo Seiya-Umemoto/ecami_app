@@ -78,7 +78,7 @@ class Classifier extends Component {
     }
 
     sliderChange = (event) => {
-        this.setState({gamma: event.target.value});
+        // this.setState({gamma: event.target.value});
     }
 
     render() { 

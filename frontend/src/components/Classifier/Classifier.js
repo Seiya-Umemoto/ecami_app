@@ -3,7 +3,8 @@ import './Classifier.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Alert, Button, Image, Spinner} from 'react-bootstrap';
 import axios from 'axios';
-import Slider from 'react-input-slider';
+// import Slider from 'react-input-slider';
+import RangeStepInput from 'react-range-step-input';
 
 class Classifier extends Component {
     state = { 
@@ -77,8 +78,9 @@ class Classifier extends Component {
         this.setState({sequences : event.target.value});
     }
 
-    sliderChange = (event) => {
-        // this.setState({gamma: event.target.value});
+    onChange(e) {
+        const newVal = e.target.value;
+        this.setState({gamma: newVal})
     }
 
     render() { 
@@ -95,18 +97,14 @@ class Classifier extends Component {
                     <br></br>
 
                     {this.state.sequences.length > 0 &&
-                        <React.Fragment>
-                        <div>{'gamma: ' + this.state.gamma}</div>
-                        <Slider
-                            axis="x"
-                            xstep={0.1}
-                            xmin={0}
-                            xmax={5}
-                            x={this.state.gamma}
-                            // onChange={({ x }) => this.setState({ x: parseFloat(x.toFixed(2)) })
-                            onChange={this.sliderChange}
-                        />
-                        </React.Fragment>
+                        <div>
+                            <p>Input gamma value:</p>
+                            <RangeStepInput>
+                                min={0} max={100}
+                                value={this.state.gamma} step={1}
+                                onChange={this.onChange.bind(this)}
+                            </RangeStepInput>
+                        </div>
                     }
                     <br></br>
             

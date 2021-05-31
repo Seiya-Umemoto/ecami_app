@@ -36,10 +36,10 @@ class Classifier extends Component {
      }
 
      sendSequence =()=>{
-         this.activateSpinner()
-         let sequenceData = JSON.stringify({
+        this.activateSpinner()
+        let sequenceData = JSON.stringify({
             sequence: this.state.sequences
-          });
+        });
         console.log(this.state.sequences);
         console.log(sequenceData);
          axios.post('http://127.0.0.1:8000/api/sequences/', sequenceData, {
@@ -77,6 +77,10 @@ class Classifier extends Component {
         this.setState({sequences : event.target.value});
     }
 
+    sliderChange = (event) => {
+        this.setState({gamma: event.target.value});
+    }
+
     render() { 
         // const [state, setState] = useState({gamma : 1.0})
 
@@ -91,20 +95,23 @@ class Classifier extends Component {
                     <br></br>
 
                     {this.state.sequences.length > 0 &&
+                        <React.Fragment>
                         <div>{'gamma: ' + this.state.gamma}</div>
-                        // <Slider
-                        //     axis="x"
-                        //     xstep={0.1}
-                        //     xmin={0}
-                        //     xmax={5}
-                        //     x={state.gamma}
-                        //     // onChange={({ x }) => setState({ x: parseFloat(x.toFixed(2)) })}
-                        //     onChange={this.handleChange}
-                        // />
+                        <Slider
+                            axis="x"
+                            xstep={0.1}
+                            xmin={0}
+                            xmax={5}
+                            x={this.state.gamma}
+                            // onChange={({ x }) => this.setState({ x: parseFloat(x.toFixed(2)) })
+                            onChange={this.sliderChange}
+                        />
+                        </React.Fragment>
                     }
+                    <br></br>
             
                     {this.state.sequences.length > 0 &&
-                    <Button variant='info' size='lg' className='mt-3' onClick={this.loadSequence}>Predict Sequence</Button>
+                    <Button variant='info' size='lg' className='mt-3' onClick={this.sendSequence}>Predict Sequence</Button>
                     }
                 </form>
 

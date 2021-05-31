@@ -10,7 +10,7 @@ class Classifier extends Component {
         sequences: [],
         isLoading: false,
         recentSequence: null,
-        gamma: null,
+        gamma: 1.0,
      }
 
      loadSequence=(sequences)=>{
@@ -78,24 +78,33 @@ class Classifier extends Component {
     }
 
     render() { 
+        // const [state, setState] = useState({gamma : 1.0})
+
         return ( 
             <div>
                 <form>
+
                     <label>
-                        <div class="input">Input Enzyme Sequence:</div>
+                        <div className="input">Input Enzyme Sequence:</div>
                     <textarea value={this.state.value} onChange={this.handleChange} rows={10} cols={100} />
                     </label>
                     <br></br>
 
                     {this.state.sequences.length > 0 &&
-                        <div>
-                        <Slider axis="x" x={this.state.gamma} onChange={this.setState} />
-                        {/* <Slider axis="gamma" x={this.state.gamma} onChange={({ x }) => this.setState({gamma : x}) /> */}
-                        </div>
+                        <div>{'gamma: ' + state.gamma}</div>
+                        // <Slider
+                        //     axis="x"
+                        //     xstep={0.1}
+                        //     xmin={0}
+                        //     xmax={5}
+                        //     x={state.gamma}
+                        //     // onChange={({ x }) => setState({ x: parseFloat(x.toFixed(2)) })}
+                        //     onChange={this.handleChange}
+                        // />
                     }
             
                     {this.state.sequences.length > 0 &&
-                    <Button variant='info' size='lg' className='mt-3' onClick={this.sendSequence}>Predict Sequence</Button>
+                    <Button variant='info' size='lg' className='mt-3' onClick={this.loadSequence}>Predict Sequence</Button>
                     }
                 </form>
 

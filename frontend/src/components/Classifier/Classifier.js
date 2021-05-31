@@ -91,7 +91,7 @@ class Classifier extends Component {
                     <br></br>
 
                     {this.state.sequences.length > 0 &&
-                        <div>{'gamma: ' + state.gamma}</div>
+                        <div>{'gamma: ' + this.state.gamma}</div>
                         // <Slider
                         //     axis="x"
                         //     xstep={0.1}

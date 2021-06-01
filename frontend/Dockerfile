@@ -1,13 +1,11 @@
 FROM node
 
+ENV PATH $PATH:/node_modules/.bin
+
 WORKDIR /app/frontend
-COPY package.json .
+COPY package.json package-lock.json ./
 
 RUN npm install --save
-RUN npm install axios --save
-RUN npm install bootstrap --save
-RUN npm install react-router-dom --save
-RUN npm install react-slider --save
 
 EXPOSE 3000
 CMD ["npm", "start"]

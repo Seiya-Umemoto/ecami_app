@@ -1,12 +1,9 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import './Classifier.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Alert, Button, Image, Spinner} from 'react-bootstrap';
 import axios from 'axios';
-// import Slider from 'react-input-slider';
-// import {RangeStepInput} from 'react-range-step-input';
-// import RangeSlider from 'react-bootstrap-range-slider';
-import ReactSlider from 'react-slider';
+import Slider from 'react-input-slider';
 
 class Classifier extends Component {
     state = { 
@@ -81,41 +78,6 @@ class Classifier extends Component {
         this.setState({sequences : event.target.value});
     }
 
-    onChange(e) {
-        const newVal = e.target.value;
-        this.setState({gamma: newVal})
-    }
-
-    // SliderComponent1 = () => {
-    //     const [state, setState] = useState({gamma : 1.0});
-
-    //     return (
-    //         <React.Fragment>
-    //             <div>{'gamma: ' + this.state.gamma}</div>
-    //             <Slider
-    //                 axis="x"
-    //                 xstep={0.1}
-    //                 xmin={0}
-    //                 xmax={5}
-    //                 x={this.state.gamma}
-    //                 // onChange={({ x }) => this.setState({ x: parseFloat(x.toFixed(2)) })}
-    //                 onChange={changeEvent => this.setState(changeEvent.target.value)}
-    //             />
-    //         </React.Fragment>
-    //     )
-    // }
-
-//     SliderComponent2 = () => {
-//         const [ value, setValue ] = useState(0); 
-
-//         return (
-//             <RangeSlider
-//                 value={value}
-//                 onChange={changeEvent => setValue(changeEvent.target.value)}
-//             />
-//   );
-//     }
-
     render() { 
 
         return ( 
@@ -131,16 +93,17 @@ class Classifier extends Component {
                     {this.state.sequences.length > 0 &&
                         <div>
                             <p>Input gamma value:</p>
-                            {/* <this.SliderComponent2></this.SliderComponent2> */}
-                            <ReactSlider
-                                className="horizontal-slider"
-                                thumbClassName="example-thumb"
-                                trackClassName="example-track"
-                                onBeforeChange={val => console.log('onBeforeChange value:', val)}
-                                onChange={val => console.log('onChange value:', val)}
-                                onAfterChange={val => console.log('onAfterChange value:', val)}
-                                renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-                            />
+                            <React.Fragment>
+                                <div>{'gamma: ' + this.state.gamma}</div>
+                                <Slider
+                                    axis="x"
+                                    xstep={0.5}
+                                    xmin={0}
+                                    xmax={5}
+                                    x={this.state.gamma}
+                                    onChange={({ x }) => this.setState({ gamma: x })}
+                                />
+                            </React.Fragment>
                         </div>
                     }
                     <br></br>

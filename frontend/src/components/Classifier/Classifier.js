@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Alert, Button, Image, Spinner} from 'react-bootstrap';
 import axios from 'axios';
 import Slider from 'react-input-slider';
+import HorizontalBarChart from './HorizontalBar';
 
 class Classifier extends Component {
     state = { 
@@ -39,7 +40,8 @@ class Classifier extends Component {
     sendSequence =()=>{
         this.activateSpinner()
         let sequenceData = JSON.stringify({
-            sequence: this.state.sequences
+            sequence: this.state.sequences,
+            gamma: this.state.gamma
         });
         console.log(this.state.sequences);
         console.log(sequenceData);
@@ -120,7 +122,8 @@ class Classifier extends Component {
                     {this.state.recentSequence &&
                     <React.Fragment>
                         <Alert variant='primary'>
-                            {this.state.recentSequence.data.classified}
+                            
+                            <HorizontalBarChart classified={this.state.recentSequence.data.classified} gamma={this.state.gamma}></HorizontalBarChart>
                         </Alert>
                         <Image className='justify-content-center' src={this.state.recentSequence.data.picture} height='200' rounded/>
                     </React.Fragment>

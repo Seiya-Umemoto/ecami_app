@@ -14,7 +14,9 @@
     "bootstrap": "^5.0.1",
     "react-bootstrap": "^1.6.0",
     "react-router-dom": "^5.2.0",
-    "react-input-slider": "^6.0.0"
+    "react-input-slider": "^6.0.0",
+    "react-chartjs-2": "^3.0.3",
+    "chart.js": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -15,7 +15,8 @@ import tensorflow.compat.v1 as tfv1
 
 # Create your models here.
 class Sequence(models.Model):
-    sequence = models.CharField(max_length=200, blank=True)
+    sequence = models.CharField(max_length=1000, blank=True)
+    gamma = models.FloatField(null=False, blank=False, default=1.0)
     classified = models.CharField(max_length=200, blank=True)
     uploaded = models.DateTimeField(auto_now_add=True)
 
@@ -52,5 +53,5 @@ class Sequence(models.Model):
         #     os.remove(img_path)
         # else:
         #     print("The file does not exist")
-        self.classified = "unknown"
+        self.classified = "unknown enzyme"
         super().save(*args, **kwargs)

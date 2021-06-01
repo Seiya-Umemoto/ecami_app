@@ -3,9 +3,9 @@ FROM node
 ENV PATH $PATH:/node_modules/.bin
 
 WORKDIR /app/frontend
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
-RUN npm install --save
+RUN npm install && npm cache clean --force
 
 EXPOSE 3000
 CMD ["npm", "start"]

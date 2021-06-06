@@ -2,11 +2,11 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
 const data = {
-  labels: ['effectA', 'effectB', 'effectC', 'effectD', 'effectE', 'effectF'],
+  labels: [],
   datasets: [
     {
       label: 'Accuracy(%)',
-      data: [92, 75, 72, 63, 62, 57],
+      data: [],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -50,6 +50,9 @@ const options = {
 };
 
 const HorizontalBarChart = (props) => (
+  data.labels = props.rank5_classified,
+  data.datasets[0].data = props.rank5_probability,
+
   <>
     <div className='header'>
       <h1 className='title'>Classified as: {props.classified}</h1>

@@ -46,7 +46,7 @@ class SequenceList extends Component {
 
     render() { 
         const sequences = this.state.sequences.slice(0, this.state.visible).map(sequence=>{
-            return <Sequence key={sequence.id} sequence={sequence.sequence} name={sequence.classified}/>
+            return <Sequence key={sequence.id} sequence={sequence.sequence} gamma={sequence.gamma} name={sequence.classified} rank5_name={sequence.rank5_classified} rank5_prob={sequence.rank5_probability}/>
         })
         return ( 
             <div>

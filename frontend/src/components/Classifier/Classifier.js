@@ -12,6 +12,7 @@ class Classifier extends Component {
         isLoading: false,
         recentSequence: null,
         gamma: 1.0,
+        dropdown: "0"
     }
 
 
@@ -41,7 +42,9 @@ class Classifier extends Component {
         this.activateSpinner()
         let sequenceData = JSON.stringify({
             sequence: this.state.sequences,
-            gamma: this.state.gamma
+            gamma: this.state.gamma,
+            rank5_classified: ["unknown"],
+            rank5_probability: [0.0]
         });
         console.log(this.state.sequences);
         console.log(sequenceData);
@@ -56,6 +59,7 @@ class Classifier extends Component {
              console.log(resp.data.id)
         })
         .catch(err=>{
+            console.log("aa")
              console.log(err)
         })
     }
@@ -80,6 +84,10 @@ class Classifier extends Component {
         this.setState({sequences : event.target.value});
     }
 
+    dropDownHandleChange = (event) => {
+        this.setState({dropdown: event.target.value})
+    }
+
     render() { 
 
         return ( 
@@ -94,18 +102,25 @@ class Classifier extends Component {
 
                     {this.state.sequences.length > 0 &&
                         <div>
-                            <p>Input gamma value:</p>
-                            <React.Fragment>
-                                <div>{'gamma: ' + this.state.gamma}</div>
-                                <Slider
-                                    axis="x"
-                                    xstep={0.5}
-                                    xmin={0}
-                                    xmax={5}
-                                    x={this.state.gamma}
-                                    onChange={({ x }) => this.setState({ gamma: x })}
-                                />
-                            </React.Fragment>
+                            <select value={this.state.dropdown} onChange={this.dropDownHandleChange}>
+                                <option value="0">Bi-directional LSTM</option>
+                                <option value="1">ProtCNN</option>
+                                <option value="2">k-mer clustering</option>
+                            </select>
+                            {this.state.dropdown == "2" &&
+                                <>
+                                <p>Input gamma value:</p>
+                                    <div>{'gamma: ' + this.state.gamma}</div>
+                                    <Slider
+                                        axis="x"
+                                        xstep={0.5}
+                                        xmin={0}
+                                        xmax={5}
+                                        x={this.state.gamma}
+                                        onChange={({ x }) => this.setState({ gamma: x })}
+                                    />
+                                </>
+                            }
                         </div>
                     }
                     <br></br>
@@ -123,7 +138,7 @@ class Classifier extends Component {
                     <React.Fragment>
                         <Alert variant='primary'>
                             
-                            <HorizontalBarChart classified={this.state.recentSequence.data.classified} gamma={this.state.gamma}></HorizontalBarChart>
+                            <HorizontalBarChart classified={this.state.recentSequence.data.classified} gamma={this.state.gamma} rank5_classified={this.state.recentSequence.data.rank5_classified} rank5_probability={this.state.recentSequence.data.rank5_probability}></HorizontalBarChart>
                         </Alert>
                         <Image className='justify-content-center' src={this.state.recentSequence.data.picture} height='200' rounded/>
                     </React.Fragment>

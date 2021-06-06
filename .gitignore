@@ -247,3 +247,6 @@ compile_commands.json
 #ignore VS Code specific files
 .vscode/
 ##################################
+
+*.h5
+*/model/*

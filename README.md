@@ -2,7 +2,7 @@
 
 ## First please check Docker installed on your PC
 For Windows User:
-Please first install [https://docs.microsoft.com/en-us/windows/wsl/install-win10](WSL2) if not.
+Please first install [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10) if not.
 
 ## Running
 

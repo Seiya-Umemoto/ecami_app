@@ -40,6 +40,7 @@ class Classifier extends Component {
 
     sendSequence =()=>{
         this.activateSpinner()
+        this.setState({recentSequence:null})
         let sequenceData = JSON.stringify({
             sequence: this.state.sequences,
             gamma: this.state.gamma,
@@ -80,7 +81,7 @@ class Classifier extends Component {
         this.deactivateSpinner()
     }
 
-    handleChange = (event) => {
+    textAreahandleChange = (event) => {
         this.setState({sequences : event.target.value});
     }
 
@@ -95,13 +96,14 @@ class Classifier extends Component {
                 <form>
 
                     <label>
-                        <div className="input">Input Enzyme Sequence:</div>
-                    <textarea value={this.state.value} onChange={this.handleChange} rows={10} cols={100} />
+                        <p className="input">Input Enzyme Sequence:</p>
+                    <textarea value={this.state.value} onChange={this.textAreahandleChange} rows={10} cols={100} />
                     </label>
                     <br></br>
 
                     {this.state.sequences.length > 0 &&
                         <div>
+                            <p>Select Classifying Model:</p>
                             <select value={this.state.dropdown} onChange={this.dropDownHandleChange}>
                                 <option value="0">Bi-directional LSTM</option>
                                 <option value="1">ProtCNN</option>
@@ -126,7 +128,7 @@ class Classifier extends Component {
                     <br></br>
             
                     {this.state.sequences.length > 0 &&
-                    <Button variant='info' size='lg' className='mt-3' onClick={this.sendSequence}>Predict Sequence</Button>
+                    <Button variant='info' size='lg' className='mt-3' onClick={this.sendSequence}>Predict the effect of the Sequence</Button>
                     }
                 </form>
 

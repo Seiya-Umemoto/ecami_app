@@ -13,6 +13,10 @@
     border: 3px dashed deepskyblue;
 }
 
-div.input{
+/* div.input{
+    font-size: 200%;
+} */
+
+.input{
     font-size: 200%;
 }

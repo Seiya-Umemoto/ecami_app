@@ -7,7 +7,7 @@ Please first install [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install
 ## Download weight files
 1. download [a weight file of bi-LSTM](https://sunmoonackr-my.sharepoint.com/:u:/g/personal/seiyau77_sunmoon_ac_kr/Eer2WKtLeJhKipVsmPqihHoBXRGFTFtdjABZVW9VNM1h2w?e=GGBxm6)
 1. download [a weight file of ProtCNN](https://sunmoonackr-my.sharepoint.com/:u:/g/personal/seiyau77_sunmoon_ac_kr/EUUurwVwkqBMlSvSWTX0AhIBXyVHFVCFU13oAA5XjXYqHw?e=9kaJN6)
-1. Save the file above into `ecami_app/api/model`
+1. Save the files above into `ecami_app/api/model`
 
 ## Running
 

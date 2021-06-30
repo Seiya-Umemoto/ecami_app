@@ -34,16 +34,14 @@ class Sequence(models.Model):
 
 
         # self.classified = str(settings.BASE_DIR)
-        encode = []
-        pad = []
         try:
             file_model_list = []
             if self.modelSelection[0]:
-                file_model_lstm = os.path.join(settings.BASE_DIR, 'model/protcnn_model2.h5')
-                file_model_list.append(file_model_lstm)
-            if self.modelSelection[1]:
                 file_model_cnn = os.path.join(settings.BASE_DIR, 'model/bdlstm_model3.h5')
                 file_model_list.append(file_model_cnn)
+            if self.modelSelection[1]:
+                file_model_lstm = os.path.join(settings.BASE_DIR, 'model/protcnn_model2.h5')
+                file_model_list.append(file_model_lstm)           
             graph = tfv1.get_default_graph()
             
             with graph.as_default():
@@ -71,7 +69,7 @@ class Sequence(models.Model):
                     elif file_model.split('/')[-1] == "protcnn_model2.h5":
                         # self.rank5_classified[1] = rank5_classified
                         # self.rank5_probability[1] = rank5_probability
-                        self.classified[1] = str(rank5_classified[1])
+                        self.classified[1] = str(rank5_classified[0])
                     print(f'classified as {rank5_classified[0]}')
         except Exception as e:
             template = "An exception of type {0} occurred. Arguments:\n{1!r}"

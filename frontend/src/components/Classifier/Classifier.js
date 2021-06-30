@@ -7,14 +7,15 @@ import Slider from 'react-input-slider';
 import HorizontalBarChart from './HorizontalBar';
 
 class Classifier extends Component {
+    modelName = ["bi-LSTM", "ProtCNN", "k-mer"];
+
     state = { 
         sequences: [],
         isLoading: false,
         recentSequence: null,
         gamma: 1.0,
-        dropdown: "0"
+        modelSelection: [false, false, false]
     }
-
 
     loadSequence=(sequences)=>{
         setTimeout(() => {
@@ -44,8 +45,12 @@ class Classifier extends Component {
         let sequenceData = JSON.stringify({
             sequence: this.state.sequences,
             gamma: this.state.gamma,
-            rank5_classified: ["unknown"],
-            rank5_probability: [0.0]
+            classified: ['unknown', 'unknown', 'unknown'],
+            // rank5_classified: [["unknown"],["unknown"],["unknown"]],
+            // rank5_probability: [[0.0],[0.0],[0.0]],
+            // rank5_classified: ["unknown"],
+            // rank5_probability: [0.0],
+            modelSelection: this.state.modelSelection
         });
         console.log(this.state.sequences);
         console.log(sequenceData);
@@ -60,8 +65,8 @@ class Classifier extends Component {
              console.log(resp.data.id)
         })
         .catch(err=>{
-            console.log("aa")
-             console.log(err)
+            console.log("failed")
+            console.log(err)
         })
     }
 
@@ -85,8 +90,17 @@ class Classifier extends Component {
         this.setState({sequences : event.target.value});
     }
 
-    dropDownHandleChange = (event) => {
-        this.setState({dropdown: event.target.value})
+    checkboxHandleChange = (event) => {
+        let items = this.state.modelSelection;
+        let item = event.target.checked;
+        if (event.target.name === "bi-LSTM") {
+            items[0] = item;
+        } else if (event.target.name === "ProtCNN") {
+            items[1] = item;
+        } else {
+            items[2] = item;
+        }
+        this.setState({items});
     }
 
     render() { 
@@ -104,12 +118,43 @@ class Classifier extends Component {
                     {this.state.sequences.length > 0 &&
                         <div>
                             <p>Select Classifying Model:</p>
-                            <select value={this.state.dropdown} onChange={this.dropDownHandleChange}>
-                                <option value="0">Bi-directional LSTM</option>
-                                <option value="1">ProtCNN</option>
-                                <option value="2">k-mer clustering</option>
-                            </select>
-                            {this.state.dropdown == "2" &&
+                            <>
+                            <label>
+                                Bi-directional LSTM:
+                                <input
+                                    id={this.modelName[0]}
+                                    name={this.modelName[0]}
+                                    type="checkbox"
+                                    checked={this.state.modelSelection[0]}
+                                    onChange={this.checkboxHandleChange}    
+                                />
+                            </label>
+                            </>
+                            <>
+                            <label>
+                                ProtCNN:
+                                <input
+                                    id={this.modelName[1]}
+                                    name={this.modelName[1]}
+                                    type="checkbox"
+                                    checked={this.state.modelSelection[1]}
+                                    onChange={this.checkboxHandleChange}
+                                />
+                            </label>
+                            </>
+                            <>
+                            <label>
+                                k-mer clustering:
+                                <input
+                                    id={this.modelName[2]}
+                                    name={this.modelName[2]}
+                                    type="checkbox"
+                                    checked={this.state.modelSelection[2]}
+                                    onChange={this.checkboxHandleChange}
+                                />
+                            </label>
+                            </>
+                            {this.state.modelSelection[2] === true &&
                                 <>
                                 <p>Input gamma value:</p>
                                     <div>{'gamma: ' + this.state.gamma}</div>
@@ -126,9 +171,9 @@ class Classifier extends Component {
                         </div>
                     }
                     <br></br>
-            
-                    {this.state.sequences.length > 0 &&
-                    <Button variant='info' size='lg' className='mt-3' onClick={this.sendSequence}>Predict the effect of the Sequence</Button>
+                    
+                    {this.state.sequences.length > 0 && this.state.modelSelection.some(item => item === true) &&
+                    <Button variant='info' size='lg' className='mt-3' onClick={this.sendSequence}>Predict the function of the Sequence</Button>
                     }
                 </form>
 

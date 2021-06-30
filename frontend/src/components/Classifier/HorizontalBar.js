@@ -55,7 +55,7 @@ const HorizontalBarChart = (props) => (
 
   <>
     <div className='header'>
-      <h1 className='title'>Classified as: {props.classified}</h1>
+      <h1 className='title'>Classified as: bi-LSTM:{props.classified[0]}, ProtCNN:{props.classified[1]}, k-mer:{props.classified[2]}</h1>
       <p>Gamma: {props.gamma}</p>
       <div className='links'>
         <a
@@ -65,7 +65,7 @@ const HorizontalBarChart = (props) => (
         </a>
       </div>
     </div>
-    <Bar data={data} options={options} />
+    <Bar className='bar' data={data} options={options} />
   </>
 );
 

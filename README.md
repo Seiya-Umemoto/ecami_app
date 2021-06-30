@@ -22,3 +22,6 @@ Please first install [WSL2](https://docs.microsoft.com/en-us/windows/wsl/install
 
 ## Closing
   - `docker-compose down -v`
+
+## Rerunning
+  - `docker-compose up -d`
